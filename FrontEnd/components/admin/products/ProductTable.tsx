@@ -27,13 +27,6 @@ export default function ProductTable({ products, onView, onEdit, onDelete }: Pro
             <tr key={product.id}>
               <td className="px-6 py-4 whitespace-nowrap">
                 <div className="flex items-center">
-                  {product.image_url && (
-                    <img
-                      className="h-10 w-10 rounded-full mr-3"
-                      src={product.image_url}
-                      alt={product.name}
-                    />
-                  )}
                   <div>
                     <div className="font-medium text-gray-900">{product.name}</div>
                     <div className="text-sm text-black">{product.brand_name}</div>
@@ -41,7 +34,7 @@ export default function ProductTable({ products, onView, onEdit, onDelete }: Pro
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-black">{product.category}</td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">₱{product.price.toFixed(2)}</td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">₱{typeof product.price === 'string' ? parseFloat(product.price).toFixed(2) : product.price.toFixed(2)}</td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-black">{product.stock_quantity}</td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span

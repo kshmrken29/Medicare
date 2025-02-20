@@ -1,16 +1,18 @@
 import React from 'react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps {
+  type?: 'button' | 'submit' | 'reset';
+  variant?: 'outline' | 'filled'; 
+  onClick?: () => void;
   children: React.ReactNode;
 }
 
-export default function Button({ children, className = '', ...props }: ButtonProps) {
+const Button: React.FC<ButtonProps> = ({ type = 'button', variant, onClick, children }) => {
   return (
-    <button
-      className={`px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${className}`}
-      {...props}
-    >
+    <button type={type} className={`btn ${variant}`} onClick={onClick}>
       {children}
     </button>
   );
-} 
+};
+
+export default Button; 
