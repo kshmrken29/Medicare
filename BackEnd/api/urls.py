@@ -1,18 +1,18 @@
 from django.contrib import admin
-from django.urls import path
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from medicare.views import CustomerViewSet
-from medicare.views import ProductViewSet
-
+from medicare.views import CustomerViewSet, ProductViewSet, login, signup, CategoryViewSet
+from django.conf import settings
+from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register(r'customers', CustomerViewSet)
 router.register(r'products', ProductViewSet)
-
+router.register(r'category', CategoryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),  # Include API endpoints
-
-]
+    path('api/', include(router.urls)),
+    path('api/login/', login, name='login'),
+    path('api/signup/', signup, name='signup'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

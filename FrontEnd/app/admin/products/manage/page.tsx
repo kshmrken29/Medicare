@@ -29,7 +29,11 @@ export default function ManageProductsPage() {
   const loadProducts = async () => {
     try {
       const data = await productAPI.getAllProducts();
-      setProducts(data);
+      const productsWithAlt = data.map((product: Product) => ({
+        ...product,
+        imageAlt: `${product.brand_name} - ${product.generic_name}`
+      }));
+      setProducts(productsWithAlt);
     } catch (error) {
       console.error('Failed to load products:', error);
     } finally {
@@ -65,7 +69,7 @@ export default function ManageProductsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <PageHeader icon={FiBox} title="Manage Products" />
+        <PageHeader icon={FiBox} title="Manage Medicines" />
         <Button onClick={() => router.push("/admin/products/add")} variant="filled">
           <span className="text-black font-bold">Add New Medicine</span>
         </Button>

@@ -19,7 +19,7 @@ const TextArea: React.FC<TextAreaProps> = ({
 }) => {
   return (
     <div className={className}>
-      <label className="block text-sm font-medium text-gray-700">{label}</label>
+      <label className="block text-sm font-medium text-black">{label}</label>
       <textarea
         name={name}
         value={value}

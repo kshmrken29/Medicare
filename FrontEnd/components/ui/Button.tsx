@@ -5,6 +5,7 @@ interface ButtonProps {
   variant?: 'outline' | 'filled'; 
   onClick?: () => void;
   children: React.ReactNode;
+  isDisabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({ type = 'button', variant, onClick, children }) => {
