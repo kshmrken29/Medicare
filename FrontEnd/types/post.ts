@@ -1,9 +1,10 @@
+import { Product } from './product';
+
 export interface Post {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  type: 'top' | 'exclusive' | 'featured';
-  price: number;
-  status: 'active' | 'inactive';
+  id: number;
+  product: number;
+  type: 'top' | 'exclusive';
+  created_at: string;
+  updated_at: string;
+  product_details: Product;
 } 

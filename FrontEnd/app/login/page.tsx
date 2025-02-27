@@ -24,6 +24,15 @@ export default function Login() {
         try {
             const response = await authAPI.login(email, password);
             if (response.status === 'success') {
+                // Store user information in localStorage
+                localStorage.setItem('userInfo', JSON.stringify({
+                    userType: response.user_type,
+                    firstName: response.user.first_name,
+                    lastName: response.user.last_name,
+                    fullName: `${response.user.first_name} ${response.user.last_name}`,
+                    displayName: `${response.user.first_name} ${response.user.last_name} (${response.user_type})`
+                }));
+
                 if (response.user_type === 'admin') {
                     router.push('/admin');
                 } else {

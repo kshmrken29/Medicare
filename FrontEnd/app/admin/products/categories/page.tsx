@@ -141,10 +141,10 @@ export default function CategoriesPage() {
             />
           </div>
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={handleCloseModal}>
+            <Button type="button" variant="outline" onClick={handleCloseModal} className="text-black">
               Cancel
             </Button>
-            <Button type="submit">
+            <Button type="submit" variant="outline" className="text-black">
               {isEditMode ? 'Update Category' : 'Add Category'}
             </Button>
           </div>

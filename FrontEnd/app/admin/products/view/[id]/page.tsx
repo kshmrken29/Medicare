@@ -8,6 +8,7 @@ import Card from "@/components/ui/Card";
 import Container from "@/components/ui/Container";
 import { productAPI } from "@/services/api";
 import { Product } from "@/types/product";
+import BackButton from "@/components/ui/BackButton";
 
 export default function ViewProductPage() {
   const { id } = useParams();
@@ -38,8 +39,11 @@ export default function ViewProductPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <PageHeader icon={FiBox} title={`View Product: ${product.brand_name}`} />
+    <div className="space-y-6 relative">
+      <div className="flex justify-between items-center">
+        <PageHeader icon={FiBox} title={`View Product: ${product.brand_name}`} />
+        <BackButton />
+      </div>
       <Container>
         <Card>
           <div className="space-y-4">

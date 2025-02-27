@@ -1,5 +1,6 @@
 import { Product } from '@/types/product';
 import axios from 'axios';
+import { Customer } from '@/types/customer';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
@@ -26,6 +27,10 @@ export const productAPI = {
 
   async createProduct(formData: FormData) {
     try {
+      if (!formData.has('prescription_required')) {
+        formData.append('prescription_required', 'false');
+      }
+      
       const response = await axios.post(`${API_BASE_URL}/products/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -183,4 +188,96 @@ export const categoryAPI = {
       throw error;
     }
   },
-}; 
+};
+
+export const postAPI = {
+  async getAllPosts() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts/`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to fetch posts');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      throw error;
+    }
+  },
+
+  async createPost(postData: { product: number; type: string }) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/posts/`, postData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error response:', error.response?.data);
+      const errorMessage = error.response?.data?.error || 
+                          error.response?.data?.detail || 
+                          'Failed to create post';
+      throw new Error(errorMessage);
+    }
+  },
+
+  async updatePost(id: number, postData: { type: string }) {
+    try {
+      const response = await axios.patch(`${API_BASE_URL}/posts/${id}/`, postData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating post:', error);
+      throw error;
+    }
+  },
+
+  async deletePost(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts/${id}/`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete post');
+      return true;
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      throw error;
+    }
+  },
+
+  async getPostsByType(type: string) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts/?type=${type}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to fetch posts');
+      }
+      return response.json();
+    } catch (error) {
+      console.error(`Error fetching ${type} posts:`, error);
+      throw error;
+    }
+  },
+};
+
+export const customerAPI = {
+  async getAllCustomers(): Promise<Customer[]> {
+    const response = await axios.get(`${API_BASE_URL}/customers/`);
+    return response.data;
+  },
+
+  async getCustomer(id: number): Promise<Customer> {
+    const response = await axios.get(`${API_BASE_URL}/customers/${id}/`);
+    return response.data;
+  },
+
+  async createCustomer(data: Partial<Customer>): Promise<Customer> {
+    const response = await axios.post(`${API_BASE_URL}/customers/`, data);
+    return response.data;
+  },
+
+  async updateCustomer(id: number, data: Partial<Customer>): Promise<Customer> {
+    const response = await axios.put(`${API_BASE_URL}/customers/${id}/`, data);
+    return response.data;
+  },
+
+  async deleteCustomer(id: number): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/customers/${id}/`);
+  },
+};

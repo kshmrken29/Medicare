@@ -10,6 +10,8 @@ from .serializers import LoginSerializer, SignupSerializer
 from rest_framework.decorators import api_view
 from .models import Category
 from .serializers import CategorySerializer
+from .models import Post
+from .serializers import PostSerializer
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
@@ -69,6 +71,10 @@ def login(request):
             return Response({
                 'status': 'success',
                 'user_type': 'admin',
+                'user': {
+                    'first_name': 'Kenneth',
+                    'last_name': 'Alvarado'
+                },
                 'message': 'Admin login successful'
             })
         
@@ -104,5 +110,75 @@ def signup(request):
             'message': 'Registration successful'
         }, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        queryset = Post.objects.all().select_related('product')
+        post_type = self.request.query_params.get('type', None)
+        
+        if post_type:
+            queryset = queryset.filter(type=post_type)
+        
+        return queryset.order_by('-created_at')
+
+    def create(self, request, *args, **kwargs):
+        try:
+            product_id = request.data.get('product')
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                return Response(
+                    {'error': 'Product not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            # Create the post
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_201_CREATED
+                )
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def update(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            serializer = self.get_serializer(instance, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 

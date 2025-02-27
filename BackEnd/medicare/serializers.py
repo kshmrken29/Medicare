@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Product, Category
+from .models import Product, Category, Post
 
 Customer = get_user_model()
 
@@ -54,3 +54,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
     def get_product_count(self, obj):
         return obj.product_count()
+
+class PostSerializer(serializers.ModelSerializer):
+    product_details = ProductSerializer(source='product', read_only=True)
+    
+    class Meta:
+        model = Post
+        fields = ['id', 'product', 'type', 'created_at', 'updated_at', 'product_details']

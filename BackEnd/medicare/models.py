@@ -86,7 +86,32 @@ class Category(models.Model):
     description = models.TextField()
 
     def product_count(self):
-        return self.products.count()  # Count related products
+        return self.products.count()  
 
     def __str__(self):
         return self.name
+
+class Post(models.Model):
+    POST_TYPES = (
+        ('top', 'Top Product'),
+        ('exclusive', 'Exclusive Product'),
+    )
+    
+    product = models.ForeignKey(
+        Product, 
+        on_delete=models.CASCADE, 
+        related_name='posts'
+    )
+    type = models.CharField(
+        max_length=10, 
+        choices=POST_TYPES
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.product.brand_name} - {self.type}"
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ['product', 'type']

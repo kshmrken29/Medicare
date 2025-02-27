@@ -16,14 +16,15 @@ interface ProductFormProps {
   initialData?: Product;
 }
 
-interface FormData {
+interface ProductFormData {
   [key: string]: string | number | boolean | File | null;
+  prescription_required: boolean;
 }
 
 export default function ProductForm({ initialData }: ProductFormProps) {
   const router = useRouter();
   const [imagePreview, setImagePreview] = useState(initialData?.image || null);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ProductFormData>({
     brand_name: initialData?.brand_name || '',
     generic_name: initialData?.generic_name || '',
     category: initialData?.category || '',
@@ -262,8 +263,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           <input
             type="checkbox"
             name="prescription_required"
-            checked={formData.prescription_required === 'true'}
-            onChange={handleInputChange}
+            checked={formData.prescription_required}
+            onChange={(e) => setFormData({
+              ...formData,
+              prescription_required: e.target.checked
+            })}
             className="mr-2 text-black"
           />
           <label className="text-black">Prescription Required</label>
@@ -300,10 +304,11 @@ export default function ProductForm({ initialData }: ProductFormProps) {
           type="button"
           variant="outline"
           onClick={() => router.push('/admin/products/manage')}
+          className="text-black"
         >
           Cancel
         </Button>
-        <Button type="submit" variant="filled" isDisabled={isSubmitting}>
+        <Button type="submit" variant="outline" isDisabled={isSubmitting} className="text-black">
           {initialData ? 'Update Product' : 'Create Product'}
         </Button>
       </div>

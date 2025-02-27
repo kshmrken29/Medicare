@@ -3,16 +3,6 @@ const API_BASE_URL = 'http://localhost:8000/api';
 export const authAPI = {
   async login(credentials: { email: string; password: string }) {
     try {
-      if (credentials.email === 'admin@gmail.com' && credentials.password === 'admin') {
-        return {
-          status: 'success',
-          user_type: 'admin',
-          user: {
-            email: 'admin@gmail.com',
-            is_customer: false
-          }
-        };
-      }
 
       const response = await fetch(`${API_BASE_URL}/auth/login/`, {
         method: 'POST',
