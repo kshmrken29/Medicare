@@ -1,0 +1,139 @@
+.content {
+  text-align: center;
+  padding: 20px;
+}
+
+.top-product {
+  margin-top: 20px;
+}
+
+ion-button {
+  margin: 10px 0;
+}
+
+/* HomePage.css */
+ion-content {
+  --background: white;
+}
+
+ion-toolbar {
+  --border-width: 0; /* Remove the border */
+  --border-style: none; /* Ensure no border style is applied */
+}
+
+.left-align-title {
+  text-align: left; /* Align text to the left */
+  padding-left: 30px; /* Add some padding to the left for better spacing */
+  padding-top: 30px; /* Adjust this value as needed */
+}
+
+/* Align the menu title to the left */
+ion-menu ion-toolbar ion-title {
+  text-align: left; /* Align the text to the left */
+  padding-left: 16px; /* Add some padding to the left for better spacing */
+  --color: black; /* Set the text color to match the menu items */
+}
+
+ion-menu {
+  --background: white;
+}
+
+ion-menu ion-content {
+  --background: rgb(128, 192, 123);
+}
+
+ion-menu ion-list {
+  background: rgb(164, 8, 8);
+}
+
+ion-card {
+  margin-top: 0; /* Remove or reduce the top margin */
+  --background: white;
+}
+
+ion-header {
+  --background: white;
+}
+
+ion-toolbar {
+  --background: white;
+  --color: black;
+}
+
+/* Style for all menu items */
+ion-menu ion-item {
+  --background: rgb(128, 192, 123); /* Background color for all menu items */
+  --color: black; /* Text color for all menu items */
+  --padding-start: 20px; /* Optional: Add padding for better spacing */
+  --padding-end: 20px; /* Optional: Add padding for better spacing */
+}
+
+ion-menu ion-toolbar {
+  --background: rgb(128, 192, 123); /* Set the background color to match the menu items */
+}
+
+/* Optional: Add hover or active state styles */
+ion-menu ion-item:hover {
+  --background: rgb(100, 150, 100); /* Slightly darker background on hover */
+}
+
+ion-menu ion-item:active {
+  --background: rgb(80, 130, 80); /* Even darker background when active */
+}
+
+ion-menu ion-item ion-icon {
+  color: black; /* Match the icon color with the text color */
+  --border-color: transparent; /* Remove the borders */
+}
+
+/* Apply the custom font to the menu title */
+ion-menu ion-toolbar ion-title {
+  font-family: 'Roboto', sans-serif; /* Use Roboto font */
+  font-size: 1.5em;
+  font-weight: 700; /* Bold weight */
+}
+
+/* Apply the custom font to the menu items */
+ion-menu ion-item {
+  font-family: 'Roboto', sans-serif; /* Use Roboto font */
+  font-size: 1em;
+}
+
+.circular-logo {
+  width: 40px; /* Set the width of the logo */
+  height: 40px; /* Set the height of the logo */
+  border-radius: 50%; /* Make the logo circular */
+  object-fit: cover; /* Ensure the image fills the circle */
+  overflow: hidden; /* Clip the image to the circular shape */
+}
+
+.menu-logo {
+  width: 40px; /* Set the width of the logo */
+  height: 40px; /* Set the height of the logo */
+  object-fit: cover; /* Ensure the image fills the circle */
+  overflow: hidden; /* Clip the image to the circular shape */
+}
+
+ion-menu-button {
+  padding-top: 25px; /* Adjust this value as needed */
+  padding-right: 20px; /* Adjust this value as needed */
+}
+
+.custom-shop-button {
+  --background: #D9D9D9; /* Custom background color */
+  --color: rgb(0, 0, 0); /* Custom text color */
+  --background-hover: #FF8C66; /* Hover background color */
+  --background-activated: #FF4500; /* Active/pressed background color */
+}
+
+.custom-shop-button ion-icon {
+  font-size: 50; /* Adjust the icon size */
+  margin-left: 8px; /* Add spacing between the text and the icon */
+}
+
+.custom-sign-button {
+  --background: #ffffff; /* Custom background color */
+  --color: rgb(0, 0, 0); /* Custom text color */
+  --background-hover: #FF8C66; /* Hover background color */
+  --background-activated: #FF4500; /* Active/pressed background color */
+}

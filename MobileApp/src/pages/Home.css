@@ -1,0 +1,41 @@
+.content {
+    text-align: left;
+    padding: 20px;
+  }
+  
+  .top-product {
+    margin-top: 20px;
+  }
+  
+  ion-button {
+    margin: 10px 0;
+  } 
+
+/* Optional: Style the menu button */
+ion-menu-button {
+    color: #000; /* Change the color of the burger icon */
+  }
+  
+  /* Optional: Style the menu items */
+  ion-menu ion-item {
+    --padding-start: 20px;
+    --padding-end: 20px;
+  }
+  /* Center the card */
+ion-card {
+    max-width: 500px;
+    margin: 20px auto;
+    text-align: center;
+  }
+  
+  /* Style the image */
+  ion-img {
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Style the buttons */
+  ion-button {
+    margin: 10px 0;
+  }
+  
