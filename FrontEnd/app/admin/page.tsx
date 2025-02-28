@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { 
   FiShoppingBag, 
@@ -38,6 +39,21 @@ const recentActivities = [
 
 export default function Dashboard() {
   const router = useRouter();
+
+  useEffect(() => {
+    // Check if user is logged in and is admin
+    const userInfo = localStorage.getItem('userInfo');
+    if (!userInfo) {
+      router.push('/login');
+      return;
+    }
+
+    const user = JSON.parse(userInfo);
+    if (user.userType !== 'admin') {
+      router.push('/dashboard');
+      return;
+    }
+  }, [router]);
 
   return (
     <div className="space-y-6">

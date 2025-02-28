@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Montserrat } from 'next/font/google';
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -33,9 +33,6 @@ const navigationItems = [
     href: "/admin/posts",
     icon: FiSend,
     label: "Posts",
-    children: [
-      { href: "/admin/posts/add", label: "Add Post Product" },
-    ],
   },
   { href: "/admin/customers", icon: FiUsers, label: "Customers" },
   {
@@ -57,7 +54,7 @@ const navigationItems = [
     ],
   },
   { href: "/admin/settings", icon: FiSettings, label: "Settings" },
-  { href: "/login", icon: FaSignOutAlt, label: "Logout" },
+  { href: "/", icon: FaSignOutAlt, label: "Logout" },
 
 ];
 
@@ -65,6 +62,18 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const pathname = usePathname();
+  const [userInfo, setUserInfo] = useState<{
+    userType: string;
+    firstName?: string;
+    lastName?: string;
+  }>({ userType: '' });
+
+  useEffect(() => {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    if (storedUserInfo) {
+      setUserInfo(JSON.parse(storedUserInfo));
+    }
+  }, []);
 
   const toggleExpanded = (label: string) => {
     setExpandedItems(prev =>
@@ -167,8 +176,8 @@ export default function Sidebar() {
           <div className="flex items-center mb-6 md:mb-8">
             <FiUser className="text-3xl md:text-4xl mr-3 text-green-400" />
             <div className="flex flex-col">
-              <span className="text-xs md:text-sm text-gray-400">Hello,</span>
-              <span className="text-sm md:text-base font-bold text-white">Admin Juan</span>
+              <span className="text-xs md:text-sm text-gray-400">Hello {userInfo?.userType},</span>
+              <span className="text-sm md:text-base font-bold text-white">{userInfo?.firstName} {userInfo?.lastName}</span>
             </div>
           </div>
 

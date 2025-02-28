@@ -1,36 +1,55 @@
 "use client"
-import React from "react";
-import Image from "next/image";
 
-export default function ExclusiveProd() {
+import { useEffect, useState } from 'react';
+import { Post } from '@/types/post';
+import { postAPI } from '@/services/api';
+
+export default function Exclusive() {
+    const [exclusiveProducts, setExclusiveProducts] = useState<Post[]>([]);
+
+    useEffect(() => {
+        const fetchExclusiveProducts = async () => {
+            try {
+                const posts = await postAPI.getPostsByType('exclusive');
+                setExclusiveProducts(posts);
+            } catch (error) {
+                console.error('Error fetching exclusive products:', error);
+            }
+        };
+
+        fetchExclusiveProducts();
+    }, []);
+
     return (
-        <div style={{ backgroundColor: "#80C07B", height: "auto" }}>
-            <div className="flex flex-col justify-center items-center p-6">
-                <h1 className="text-white text-4xl font-bold">EXCLUSIVE PRODUCTS</h1>
-                <h2 className="text-center">Prescription for Savings: Discover Exclusive Medicine Deals!</h2>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6 p-6">
-                {[...Array(7)].map((_, index) => (
-                    <div key={index} className="bg-white p-4 shadow-lg rounded-lg flex flex-col">
-                        <div className="relative w-full h-48">
-                            <Image 
-                                src={`/images/product/prod${7 - index}.jpg`} 
-                                alt="Card Image" 
-                                layout="fill" 
-                                objectFit="cover" 
-                                className="rounded-t-lg" 
-                            />
+        <div className="py-16 bg-gray-50">
+            <div className="container mx-auto px-4">
+                <h2 className="text-3xl text-black font-bold mb-8">Exclusive Products</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {exclusiveProducts.map((post) => (
+                        <div key={post.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+                            {post.product_details && (
+                                <>
+                                    <img
+                                        src={post.product_details.image || '/placeholder.jpg'}
+                                        alt={post.product_details.brand_name}
+                                        className="w-full h-48 object-cover"
+                                    />
+                                    <div className="p-4">
+                                        <h3 className="text-xl text-black font-semibold mb-2">
+                                            {post.product_details.brand_name}
+                                        </h3>
+                                        <p className="text-gray-600">
+                                            {post.product_details.generic_name}
+                                        </p>
+                                        <p className="text-lg text-green-600 font-bold mt-2">
+                                            ₱{post.product_details.price}
+                                        </p>
+                                    </div>
+                                </>
+                            )}
                         </div>
-                        <div className="mt-4 flex flex-col items-center">
-                            <h3 className="text-xl font-semibold">Card Title</h3>
-                            <p className="text-center text-gray-600 mt-2">This is a brief description of the card content.</p>
-                            <div className="mt-4 flex space-x-4">
-                                <button className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition">Button 1</button>
-                                <button className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-600 transition">Button 2</button>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </div>
     );

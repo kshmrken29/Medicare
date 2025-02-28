@@ -1,5 +1,6 @@
-import { Category } from "@/types/category";
-import CategoryActions from "./CategoryActions";
+import React from 'react';
+import { Category } from '@/types/category';
+import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 
 interface CategoryTableProps {
   categories: Category[];
@@ -8,67 +9,36 @@ interface CategoryTableProps {
   onDelete: (category: Category) => void;
 }
 
-export default function CategoryTable({ categories, onView, onEdit, onDelete }: CategoryTableProps) {
+const CategoryTable: React.FC<CategoryTableProps> = ({ categories, onView, onEdit, onDelete }) => {
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
-          <tr>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase">
-              Category Name
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase">
-              Description
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase">
-              Products
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase">
-              Status
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase">
-              Actions
-            </th>
+    <table className="min-w-full divide-y divide-gray-200">
+      <thead className="bg-gray-50">
+        <tr>
+          <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Category Name</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Description</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Product Count</th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Actions</th>
+        </tr>
+      </thead>
+      <tbody className="bg-white divide-y divide-gray-200">
+        {categories.map((category) => (
+          <tr key={category.id}>
+            <td className="px-6 py-4 whitespace-nowrap">{category.name}</td>
+            <td className="px-6 py-4 whitespace-nowrap">{category.description}</td>
+            <td className="px-6 py-4 whitespace-nowrap">{category.product_count}</td>
+            <td className="px-6 py-4 whitespace-nowrap">
+                <button onClick={() => onEdit(category)} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                  <FiEdit2 className="h-5 w-5" />
+                </button>
+                <button onClick={() => onDelete(category)} className="text-red-600 hover:text-red-900">
+                  <FiTrash2 className="h-5 w-5" />
+                </button>
+            </td>
           </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
-          {categories.map((category) => (
-            <tr key={category.id}>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <div className="flex items-center">
-                  <div className="font-medium text-gray-900">
-                    {category.name}
-                  </div>
-                </div>
-              </td>
-              <td className="px-6 py-4 text-sm text-black">
-                {category.description}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                {category.product_count}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap">
-                <span
-                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                  ${category.status === "Active" 
-                    ? "bg-green-100 text-green-800" 
-                    : "bg-gray-100 text-gray-800"
-                  }`}
-                >
-                  {category.status}
-                </span>
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                <CategoryActions
-                  onView={() => onView(category)}
-                  onEdit={() => onEdit(category)}
-                  onDelete={() => onDelete(category)}
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        ))}
+      </tbody>
+    </table>
   );
-} 
+};
+
+export default CategoryTable;

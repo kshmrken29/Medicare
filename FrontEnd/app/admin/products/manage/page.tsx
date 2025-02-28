@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import PageHeader from "@/components/admin/PageHeader";
-import { FiBox, FiEdit2, FiTrash2, FiEye } from "react-icons/fi";
+import { FiBox, FiEdit2, FiTrash2, FiEye, FiPlus } from "react-icons/fi";
 import Card from "@/components/ui/Card";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
@@ -29,7 +29,11 @@ export default function ManageProductsPage() {
   const loadProducts = async () => {
     try {
       const data = await productAPI.getAllProducts();
-      setProducts(data);
+      const productsWithAlt = data.map((product: Product) => ({
+        ...product,
+        imageAlt: `${product.brand_name} - ${product.generic_name}`
+      }));
+      setProducts(productsWithAlt);
     } catch (error) {
       console.error('Failed to load products:', error);
     } finally {
@@ -63,11 +67,13 @@ export default function ManageProductsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 text-black">
       <div className="flex justify-between items-center">
-        <PageHeader icon={FiBox} title="Manage Products" />
+        <PageHeader icon={FiBox} title="Manage Medicines" />
         <Button onClick={() => router.push("/admin/products/add")} variant="filled">
-          <span className="text-black font-bold">Add New Medicine</span>
+        <div className="flex items-center justify-center">
+            <FiPlus className="mr-2" /> Add New Medicine
+          </div>
         </Button>
       </div>
 

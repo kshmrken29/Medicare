@@ -3,5 +3,4 @@ export interface Category {
   name: string;
   description: string;
   product_count: number;
-  status: "Active" | "Inactive";
 }

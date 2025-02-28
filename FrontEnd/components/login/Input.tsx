@@ -1,17 +1,36 @@
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+interface InputProps {
+    type: string;
+    label: string;
+    placeholder: string;
+    className?: string;
+    name?: string;
+    value?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    required?: boolean;
 }
 
-export default function Input({ label, ...props }: InputProps) {
-  return (
-    <div className="w-full">
-      {label && (
-        <label className="text-black block text-xs md:text-sm mb-1 md:mb-2">{label}</label>
-      )}
-      <input
-        {...props}
-        className="w-full p-2 md:p-3 bg-gray-100 rounded-xl md:rounded-2xl text-xs md:text-sm text-black"
-      />
-    </div>
-  );
+export default function Input({
+    type,
+    label,
+    placeholder,
+    className = '',
+    name,
+    value,
+    onChange,
+    required
+}: InputProps) {
+    return (
+        <div className="space-y-2">
+            <label className="block text-black text-xs tracking-wider">{label}</label>
+            <input
+                type={type}
+                name={name}
+                placeholder={placeholder}
+                className={`w-full px-4 py-2 border border-gray-300 rounded-md ${className}`}
+                value={value}
+                onChange={onChange}
+                required={required}
+            />
+        </div>
+    );
 } 

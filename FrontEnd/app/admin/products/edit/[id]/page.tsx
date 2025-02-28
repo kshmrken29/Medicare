@@ -9,7 +9,7 @@ import Card from '@/components/ui/Card';
 import Container from '@/components/ui/Container';
 import { productAPI } from '@/services/api';
 import { Product } from '@/types/product';
-
+import BackButton from '@/components/ui/BackButton';
 export default function EditProductPage() {
   const params = useParams();
   const [product, setProduct] = useState<Product | null>(null);
@@ -30,8 +30,11 @@ export default function EditProductPage() {
   }, [params.id]);
 
   return (
-    <div className="space-y-6">
-      <PageHeader icon={FiEdit2} title="Edit Medicine" />
+    <div className="space-y-6 relative">
+      <div className="flex justify-between items-center">
+            <PageHeader icon={FiEdit2} title="Edit Medicine" />
+        <BackButton />
+      </div>
       
       <Container>
         <Card>

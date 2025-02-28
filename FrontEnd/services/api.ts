@@ -1,4 +1,6 @@
 import { Product } from '@/types/product';
+import axios from 'axios';
+import { Customer } from '@/types/customer';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
@@ -7,7 +9,6 @@ export const productAPI = {
     try {
       const response = await fetch(`${API_BASE_URL}/products/`);
       const data = await response.json();
-      // Convert price strings to numbers
       return data.map((product: Product) => ({
         ...product,
         price: typeof product.price === 'string' ? parseFloat(product.price) : product.price
@@ -24,44 +25,32 @@ export const productAPI = {
     return response.json();
   },
 
-  async createProduct(productData: Omit<Product, 'id'>) {
+  async createProduct(formData: FormData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/products/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(productData)
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to create product');
+      if (!formData.has('prescription_required')) {
+        formData.append('prescription_required', 'false');
       }
       
-      return await response.json();
+      const response = await axios.post(`${API_BASE_URL}/products/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
     } catch (error) {
-      console.error('Error creating product:', error);
+      console.error('API Error Details:', error);
       throw error;
     }
   },
 
-  async updateProduct(id: number, productData: Omit<Product, 'id'>) {
+  async updateProduct(id: number, formData: FormData) {
     try {
-      const response = await fetch(`${API_BASE_URL}/products/${id}/`, {
-        method: 'PUT',
+      const response = await axios.patch(`${API_BASE_URL}/products/${id}/`, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
-        body: JSON.stringify(productData)
       });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to update product');
-      }
-      
-      return await response.json();
+      return response.data;
     } catch (error) {
       console.error('Error updating product:', error);
       throw error;
@@ -75,4 +64,220 @@ export const productAPI = {
     if (!response.ok) throw new Error('Failed to delete product');
     return true;
   },
-}; 
+};
+
+export const authAPI = {
+  async login(email: string, password: string) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/login/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Login failed');
+      }
+      
+      const data = await response.json();
+      if (data.user_type === 'admin') {
+        window.location.href = '/admin';
+      }
+      return data;
+    } catch (error) {
+      console.error('Login error:', error);
+      throw error;
+    }
+  },
+
+  async signup(userData: {
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+    confirm_password: string;
+  }) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/signup/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Signup failed');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Signup error:', error);
+      throw error;
+    }
+  }
+};
+
+export const categoryAPI = {
+  async getAllCategories() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/category/`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || 'Failed to fetch categories');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      throw error;
+    }
+  },
+
+  async createCategory(categoryData: { name: string; description: string }) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/category/`, categoryData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      console.error('Error creating category:', error.response?.data || error);
+      throw new Error(error.response?.data?.detail || 'Failed to create category');
+    }
+  },
+
+  async updateCategory(id: number, categoryData: { name: string; description: string }) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/category/${id}/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(categoryData),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to update category');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error updating category:', error);
+      throw error;
+    }
+  },
+
+  async deleteCategory(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/category/${id}/`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || 'Failed to delete category');
+      }
+      return true;
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      throw error;
+    }
+  },
+};
+
+export const postAPI = {
+  async getAllPosts() {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts/`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to fetch posts');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      throw error;
+    }
+  },
+
+  async createPost(postData: { product: number; type: string }) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/posts/`, postData);
+      return response.data;
+    } catch (error: any) {
+      console.error('Error response:', error.response?.data);
+      const errorMessage = error.response?.data?.error || 
+                          error.response?.data?.detail || 
+                          'Failed to create post';
+      throw new Error(errorMessage);
+    }
+  },
+
+  async updatePost(id: number, postData: { type: string }) {
+    try {
+      const response = await axios.patch(`${API_BASE_URL}/posts/${id}/`, postData);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating post:', error);
+      throw error;
+    }
+  },
+
+  async deletePost(id: number) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts/${id}/`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Failed to delete post');
+      return true;
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      throw error;
+    }
+  },
+
+  async getPostsByType(type: string) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts/?type=${type}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Failed to fetch posts');
+      }
+      return response.json();
+    } catch (error) {
+      console.error(`Error fetching ${type} posts:`, error);
+      throw error;
+    }
+  },
+};
+
+export const customerAPI = {
+  async getAllCustomers(): Promise<Customer[]> {
+    const response = await axios.get(`${API_BASE_URL}/customers/`);
+    return response.data;
+  },
+
+  async getCustomer(id: number): Promise<Customer> {
+    const response = await axios.get(`${API_BASE_URL}/customers/${id}/`);
+    return response.data;
+  },
+
+  async createCustomer(data: Partial<Customer>): Promise<Customer> {
+    const response = await axios.post(`${API_BASE_URL}/customers/`, data);
+    return response.data;
+  },
+
+  async updateCustomer(id: number, data: Partial<Customer>): Promise<Customer> {
+    const response = await axios.put(`${API_BASE_URL}/customers/${id}/`, data);
+    return response.data;
+  },
+
+  async deleteCustomer(id: number): Promise<void> {
+    await axios.delete(`${API_BASE_URL}/customers/${id}/`);
+  },
+};
