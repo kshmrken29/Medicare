@@ -1,4 +1,3 @@
-// Home.tsx
 import React from "react";
 import {
   IonContent,
@@ -26,7 +25,7 @@ import {
 } from "ionicons/icons";
 import Topbar from "../components/Topbar";
 
-const HomePage: React.FC = () => {
+const HomePage: React.FC = () => { 
   return (
     <>
       <IonMenu side="end" contentId="main-content">
@@ -35,7 +34,7 @@ const HomePage: React.FC = () => {
             <IonTitle>Menu</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent>
+        <IonContent className="homecard">
           <IonList>
             <IonItem routerLink="/home" routerDirection="forward">
               <IonIcon icon={homeOutline} slot="start" />
@@ -72,16 +71,16 @@ const HomePage: React.FC = () => {
               </p>
               <IonButton
                 expand="block"
-                routerLink="/shop"
+                routerLink="/product"
                 className="custom-shop-button"
               >
                 SHOP NOW <IonIcon icon={arrowForward} slot="end" />
               </IonButton>
               <IonButton
-                expand="block"
-                fill="outline"
-                routerLink="/signin"
-                className="custom-sign-button"
+                 expand="block"
+                 fill="outline"
+                 routerLink="/login"
+                 className="custom-sign-button"
               >
                 SIGN IN
               </IonButton>
@@ -93,4 +92,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default HomePage; 
