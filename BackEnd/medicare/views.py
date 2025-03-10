@@ -67,23 +67,12 @@ def login(request):
         email = serializer.validated_data['email']
         password = serializer.validated_data['password']
         
-        if email == "admin@gmail.com" and password == "admin":
-            return Response({
-                'status': 'success',
-                'user_type': 'admin',
-                'user': {
-                    'first_name': 'Kenneth',
-                    'last_name': 'Alvarado'
-                },
-                'message': 'Admin login successful'
-            })
-        
         try:
             customer = Customer.objects.get(email=email)
             if check_password(password, customer.password):
                 return Response({
                     'status': 'success',
-                    'user_type': 'customer',
+                    'user_type': customer.user_type,  # This will be 'customer' or 'admin'
                     'user': CustomerSerializer(customer).data,
                     'message': 'Login successful'
                 })

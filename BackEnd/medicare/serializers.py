@@ -12,11 +12,15 @@ class CustomerSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    is_low_stock = serializers.SerializerMethodField()
     
     class Meta:
         model = Product
         fields = '__all__'
-        read_only_fields = ('id',)  
+        read_only_fields = ('id',)
+
+    def get_is_low_stock(self, obj):
+        return obj.stock_quantity < 10
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()

@@ -78,6 +78,9 @@ class Product(models.Model):
     form = models.CharField(max_length=100)
     status = models.CharField(max_length=50)
 
+    def is_low_stock(self):
+        return self.stock_quantity < 10
+
     def __str__(self):
         return f"{self.brand_name} ({self.generic_name})"
 
