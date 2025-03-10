@@ -23,24 +23,15 @@ export default function Login() {
         
         try {
             const response = await authAPI.login(email, password);
-            if (response.status === 'success') {
-                // Store user information in localStorage
-                localStorage.setItem('userInfo', JSON.stringify({
-                    userType: response.user_type,
-                    firstName: response.user.first_name,
-                    lastName: response.user.last_name,
-                    fullName: `${response.user.first_name} ${response.user.last_name}`,
-                    displayName: `${response.user.first_name} ${response.user.last_name} (${response.user_type})`
-                }));
-
-                if (response.user_type === 'admin') {
-                    router.push('/admin');
-                } else {
-                    router.push('/dashboard');
-                }
+            
+            // Redirect based on user type
+            if (response.user_type === 'admin') {
+                router.push('/admin');
+            } else {
+                router.push('/customer');
             }
         } catch (err: any) {
-            setError(err.message || 'Login failed');
+            setError(err.message || 'Invalid credentials');
         }
     };
 
@@ -56,7 +47,7 @@ export default function Login() {
                     type="email"
                     label="Email Address"
                     placeholder="Enter your email"
-                    className=" text-black"
+                    className="text-black"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -65,7 +56,7 @@ export default function Login() {
                     type="password"
                     label="Password"
                     placeholder="Enter your password"
-                    className=" text-black"
+                    className="text-black"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required

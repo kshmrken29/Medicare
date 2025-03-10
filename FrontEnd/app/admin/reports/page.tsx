@@ -5,8 +5,25 @@ import PageHeader from '@/components/admin/PageHeader';
 import Container from '@/components/ui/Container';
 import ReportStatsCard from '@/components/admin/reports/ReportStatsCard';
 import ChartCard from '@/components/admin/reports/ChartCard';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { useState, useEffect } from 'react';
 
 export default function ReportsPage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <PageHeader icon={FiBarChart2} title="Reports & Analytics" />

@@ -1,6 +1,16 @@
 import { Product } from '@/types/product';
 import axios from 'axios';
 import { Customer } from '@/types/customer';
+import { 
+  FiShoppingBag, 
+  FiPackage,
+  FiTrendingUp,
+  FiPlusCircle,
+  FiGrid,
+  FiSend,
+  FiStar,
+  FiUsers 
+} from 'react-icons/fi';
 
 const API_BASE_URL = 'http://localhost:8000/api';
 
@@ -83,9 +93,8 @@ export const authAPI = {
       }
       
       const data = await response.json();
-      if (data.user_type === 'admin') {
-        window.location.href = '/admin';
-      }
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      
       return data;
     } catch (error) {
       console.error('Login error:', error);
@@ -280,4 +289,43 @@ export const customerAPI = {
   async deleteCustomer(id: number): Promise<void> {
     await axios.delete(`${API_BASE_URL}/customers/${id}/`);
   },
+};
+
+export const dashboardAPI = {
+  async getDashboardStats() {
+    try {
+      // Get products count
+      const productsResponse = await fetch(`${API_BASE_URL}/products/`);
+      const products = await productsResponse.json();
+
+      // Get categories count
+      const categoriesResponse = await fetch(`${API_BASE_URL}/category/`);
+      const categories = await categoriesResponse.json();
+
+      // Get posts count
+      const postsResponse = await fetch(`${API_BASE_URL}/posts/`);
+      const posts = await postsResponse.json();
+
+      // Get customers count
+      const customersResponse = await fetch(`${API_BASE_URL}/customers/`);
+      const customers = await customersResponse.json();
+
+      // Calculate post types
+      const topPosts = posts.filter((post: any) => post.type === 'top').length;
+      const exclusivePosts = posts.filter((post: any) => post.type === 'exclusive').length;
+
+      return {
+        totalProducts: products.length,
+        totalOrders: 0, // You'll need to implement orders API
+        totalCategories: categories.length,
+        totalCustomers: customers.length,
+        totalPosts: posts.length,
+        topPosts,
+        exclusivePosts
+      };
+    } catch (error) {
+      console.error('Error fetching dashboard stats:', error);
+      throw error;
+    }
+  }
 };

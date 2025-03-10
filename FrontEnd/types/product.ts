@@ -17,5 +17,6 @@ export interface Product {
   manufacturer: string;
   dosage: string;
   form: string;
-  status: "Available" | "Out of Stock" | "Discontinued";
+  status: "Available" | "Out of Stock";
+  is_low_stock: boolean;
 } 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiRefreshCcw } from 'react-icons/fi';
 import PageHeader from '@/components/admin/PageHeader';
@@ -9,6 +9,7 @@ import Card from '@/components/ui/Card';
 import PaymentFilters from '@/components/admin/payments/PaymentFilters';
 import PaymentTable from '@/components/admin/payments/PaymentTable';
 import { Payment } from '@/types/payment';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 const sampleRefunds: Payment[] = [
   {
@@ -25,6 +26,20 @@ const sampleRefunds: Payment[] = [
 export default function RefundsPage() {
   const router = useRouter();
   const [refunds, setRefunds] = useState<Payment[]>(sampleRefunds);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   const handleView = (refund: Payment) => {
     router.push(`/admin/payments/refunds/${refund.id}`);

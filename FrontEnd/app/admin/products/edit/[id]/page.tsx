@@ -10,6 +10,8 @@ import Container from '@/components/ui/Container';
 import { productAPI } from '@/services/api';
 import { Product } from '@/types/product';
 import BackButton from '@/components/ui/BackButton';
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+
 export default function EditProductPage() {
   const params = useParams();
   const [product, setProduct] = useState<Product | null>(null);
@@ -28,6 +30,14 @@ export default function EditProductPage() {
       fetchProduct();
     }
   }, [params.id]);
+
+  if (!product) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 relative">

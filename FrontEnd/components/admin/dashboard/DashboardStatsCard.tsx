@@ -8,6 +8,7 @@ interface DashboardStatsCardProps {
   description: string;
   bgColor: string;
   textColor: string;
+  className?: string;
 }
 
 export default function DashboardStatsCard({ 
@@ -16,11 +17,12 @@ export default function DashboardStatsCard({
   icon: Icon, 
   description,
   bgColor,
-  textColor 
+  textColor,
+  className = ''
 }: DashboardStatsCardProps) {
   return (
     <Card>
-      <div className="p-6">
+      <div className={`p-4 md:p-6 rounded-lg ${bgColor} ${className}`}>
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-gray-600">{title}</p>

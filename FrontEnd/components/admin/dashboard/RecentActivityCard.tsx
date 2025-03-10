@@ -8,6 +8,7 @@ interface Activity {
 
 interface RecentActivityCardProps {
   activities: Activity[];
+  className?: string;
 }
 
 export default function RecentActivityCard({ activities }: RecentActivityCardProps) {

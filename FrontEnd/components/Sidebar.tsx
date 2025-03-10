@@ -58,20 +58,31 @@ const navigationItems = [
 
 ];
 
+interface UserInfo {
+  user_type: string;
+  first_name: string;
+  last_name: string;
+}
+
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const pathname = usePathname();
-  const [userInfo, setUserInfo] = useState<{
-    userType: string;
-    firstName?: string;
-    lastName?: string;
-  }>({ userType: '' });
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('userInfo');
     if (storedUserInfo) {
-      setUserInfo(JSON.parse(storedUserInfo));
+      try {
+        const parsedUserInfo = JSON.parse(storedUserInfo);
+        setUserInfo({
+          user_type: parsedUserInfo.user_type,
+          first_name: parsedUserInfo.first_name,
+          last_name: parsedUserInfo.last_name,
+        });
+      } catch (error) {
+        console.error('Error parsing user info:', error);
+      }
     }
   }, []);
 
@@ -176,14 +187,17 @@ export default function Sidebar() {
           <div className="flex items-center mb-6 md:mb-8">
             <FiUser className="text-3xl md:text-4xl mr-3 text-green-400" />
             <div className="flex flex-col">
-              <span className="text-xs md:text-sm text-gray-400">Hello {userInfo?.userType},</span>
-              <span className="text-sm md:text-base font-bold text-white">{userInfo?.firstName} {userInfo?.lastName}</span>
+              {userInfo?.user_type === 'admin' && (
+                <span className="text-sm md:text-base font-bold text-white">
+                   Admin
+                </span>
+              )}
             </div>
           </div>
 
           <div className="mb-4 md:mb-6">
             <div className="text-xs md:text-sm text-gray-400 mb-1 md:mb-2">Earning</div>
-            <div className="text-xl md:text-2xl font-extrabold text-white">₱000,000.000</div>
+            <div className="text-xl md:text-2xl font-extrabold text-white">$0.00</div>
           </div>
 
           <ul className="space-y-1 md:space-y-2">

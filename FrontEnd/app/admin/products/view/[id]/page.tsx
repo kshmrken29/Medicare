@@ -9,6 +9,7 @@ import Container from "@/components/ui/Container";
 import { productAPI } from "@/services/api";
 import { Product } from "@/types/product";
 import BackButton from "@/components/ui/BackButton";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function ViewProductPage() {
   const { id } = useParams();
@@ -31,7 +32,11 @@ export default function ViewProductPage() {
   }, [id]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (!product) {

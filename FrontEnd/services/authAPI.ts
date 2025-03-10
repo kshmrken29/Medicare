@@ -1,27 +1,31 @@
 const API_BASE_URL = 'http://localhost:8000/api';
 
 export const authAPI = {
-  async login(credentials: { email: string; password: string }) {
+  async login(email: string, password: string) {
     try {
-
-      const response = await fetch(`${API_BASE_URL}/auth/login/`, {
+      const response = await fetch(`${API_BASE_URL}/login/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(credentials)
+        body: JSON.stringify({ email, password })
       });
 
       const data = await response.json();
+      
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
+
+      // Store user info in localStorage
+      localStorage.setItem('userInfo', JSON.stringify({
+        user_type: data.user_type,
+        first_name: data.user.first_name,
+        last_name: data.user.last_name,
+        // ... other user properties
+      }));
       
-      return {
-        ...data,
-        status: 'success',
-        user_type: 'customer'  
-      };
+      return data;
     } catch (error) {
       console.error('Login error:', error);
       throw error;

@@ -14,6 +14,7 @@ import { Category } from "@/types/category";
 import Modal from '@/components/ui/Modal';
 import { categoryAPI } from '@/services/api';
 import { toast } from "react-hot-toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 export default function CategoriesPage() {
   const [categories, setCategories] = useState<Category[]>([]);
@@ -23,6 +24,7 @@ export default function CategoriesPage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [formData, setFormData] = useState({ name: '', description: '' });
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     loadCategories();
@@ -34,6 +36,8 @@ export default function CategoriesPage() {
       setCategories(data);
     } catch (error) {
       toast.error('Failed to load categories');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -88,6 +92,14 @@ export default function CategoriesPage() {
     setSelectedCategory(null);
     setFormData({ name: '', description: '' });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 text-black">

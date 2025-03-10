@@ -6,37 +6,38 @@ import PageHeader from '@/components/admin/PageHeader';
 import Container from '@/components/ui/Container';
 import StatsGrid from '@/components/admin/products/StatsGrid';
 import QuickActions from '@/components/admin/products/QuickActions';
+import { useProductStats } from '@/hooks/useProductStats';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 export default function ProductsPage() {
   const router = useRouter();
-
-  const summaryData = {
-    totalProducts: 0,
-    activeProducts: 0,
-    activeCategories: 0,
-    lowStock: 0,
-    outOfStock: 0,
-    totalSales: "₱0",
-  };
+  const { stats, loading } = useProductStats();
 
   const handleNavigation = (route: string) => {
     router.push(route);
   };
 
-  return (
-    <div className="space-y-8">
-      <PageHeader icon={FiBox} title="Products Dashboard" />
-      
-      <Container>
-        <StatsGrid 
-          stats={summaryData} 
-          onCardClick={handleNavigation} 
-        />
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
-        <div className="mt-8">
-          <QuickActions onActionClick={handleNavigation} />
-        </div>
-      </Container>
-    </div>
+  return (
+    <>
+      <PageHeader icon={FiBox} title="Products" />
+      <div className="space-y-4 md:space-y-8 p-4 md:p-8">
+        <Container>
+          <div className="grid gap-4 md:gap-8">
+            <StatsGrid 
+              stats={stats} 
+            />
+            <QuickActions onActionClick={handleNavigation} />
+          </div>
+        </Container>
+      </div>
+    </>
   );
 }

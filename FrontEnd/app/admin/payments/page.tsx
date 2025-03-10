@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiDollarSign, FiCreditCard, FiRefreshCcw } from 'react-icons/fi';
 import PageHeader from '@/components/admin/PageHeader';
@@ -10,6 +10,7 @@ import PaymentStatsCard from '@/components/admin/payments/PaymentStatsCard';
 import PaymentFilters from '@/components/admin/payments/PaymentFilters';
 import PaymentTable from '@/components/admin/payments/PaymentTable';
 import { Payment } from '@/types/payment';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 const samplePayments: Payment[] = [
   {
@@ -26,6 +27,20 @@ const samplePayments: Payment[] = [
 export default function PaymentsPage() {
   const router = useRouter();
   const [payments, setPayments] = useState<Payment[]>(samplePayments);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading
+    setTimeout(() => setLoading(false), 1000);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   const handleView = (payment: Payment) => {
     router.push(`/admin/payments/${payment.id}`);

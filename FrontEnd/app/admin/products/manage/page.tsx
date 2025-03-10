@@ -13,6 +13,7 @@ import ProductTable from "@/components/admin/products/ProductTable";
 import { productAPI } from "@/services/api";
 import { Product } from '@/types/product';
 import { toast } from "react-hot-toast";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 
 
@@ -65,6 +66,14 @@ export default function ManageProductsPage() {
       }
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 text-black">
