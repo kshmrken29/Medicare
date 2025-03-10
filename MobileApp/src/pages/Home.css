@@ -1,0 +1,135 @@
+/* HomePage.css */
+.content {
+  text-align: center;
+  padding: 20px;
+}
+
+.top-product {
+  margin-top: 20px;
+}
+
+ion-button {
+  margin: 10px 0;
+}
+
+ion-content {
+  --background: rgb(255, 255, 255);
+}
+
+ion-toolbar {
+  --border-width: 0;
+  --border-style: none;
+  --background: #ffffff; /* Very light gray */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.left-align-title {
+  text-align: left;
+  padding-left: 30px;
+  padding-top: 30px;
+}
+
+ion-menu ion-toolbar ion-title {
+  text-align: left;
+  padding-left: 16px;
+  --color: black;
+}
+
+ion-menu {
+  --background: white;
+}
+
+ion-menu ion-content {
+  --background: rgb(128, 192, 123);
+}
+
+ion-card {
+  margin-top: 0;
+  --background: white;
+}
+
+ion-header {
+  --background: white;
+}
+
+ion-menu ion-item {
+  --background: rgb(128, 192, 123);
+  --color: black;
+  --padding-start: 20px;
+  --padding-end: 20px;
+}
+
+ion-menu ion-toolbar {
+  --background: rgb(128, 192, 123);
+}
+
+ion-menu ion-item:hover {
+  --background: rgb(100, 150, 100);
+}
+
+ion-menu ion-item:active {
+  --background: rgb(80, 130, 80);
+}
+
+ion-menu ion-item ion-icon {
+  color: black;
+  --border-color: transparent;
+}
+
+ion-menu ion-toolbar ion-title {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+ion-menu ion-item {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+}
+
+.circular-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+ion-menu-button {
+  padding-top: 25px;
+  padding-right: 20px;
+  color: black; /* force the menu button to be black */
+}
+
+.custom-shop-button {
+  --background: #D9D9D9;
+  --color: rgb(0, 0, 0);
+  --background-hover: #FF8C66;
+  --background-activated: #FF4500;
+}
+
+.custom-shop-button ion-icon {
+  font-size: 50;
+  margin-left: 8px;
+}
+
+.custom-sign-button {
+  --background: #ffffff;
+  --color: rgb(0, 0, 0);
+  --background-hover: #FF8C66;
+  --background-activated: #FF4500;
+}
+
+.custom-toolbar ion-title{
+  color: rgb(0, 0, 0);
+}
+
+
+/* Hamburger Menu */
+ion-menu ion-item {
+  --border-color: transparent; /* Removes the border */
+  --inner-border-width: 0px; /* Also insures there are no inner borders */
+}
+ion-list {
+  border: none;
+}
