@@ -18,24 +18,22 @@ const Navbar = () => {
               <div className="flex-shrink-0">
                 <Link
                   href="/"
-                  className="text-black font-extrabold"
+                  className="font-extrabold"
                   style={{ fontSize: "40px" }}
                 >
-                  MC
+                  <span className="text-black">M</span><span className="text-green-500">C</span>
                 </Link>
               </div>
             </div>
             <div className="hidden md:block">
               <div className="ml-4 flex items-center space-x-4">
-                <Link href="/" className="text-black hover:bg-white hover:text-black rounded-lg p-2">Categories</Link>
-                <Link href="/" className="text-black hover:bg-white hover:text-black rounded-lg p-2">Product</Link>
-                <Link href="/" className="text-black hover:bg-white hover:text-black rounded-lg p-2">About</Link>
+                <Link href="/login" className="bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition">
+                  Shop Now
+                </Link>
+                <Link href="/signup" className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
+                  Sign Up
+                </Link>
               </div>
-            </div>
-            <div className="hidden md:flex items-center">
-              <Link href="/profile" className="text-black hover:bg-gray-200 rounded-full p-2">
-                <User size={24} />
-              </Link>
             </div>
             <div className="md:hidden flex items-center">
               <button
@@ -70,10 +68,12 @@ const Navbar = () => {
         {isClick && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <Link href="/" className="text-black block hover:bg-white hover:text-black rounded-lg p-2">Home</Link>
-              <Link href="/" className="text-black block hover:bg-white hover:text-black rounded-lg p-2">Categories</Link>
-              <Link href="/" className="text-black block hover:bg-white hover:text-black rounded-lg p-2">Product</Link>
-              <Link href="/" className="text-black block hover:bg-white hover:text-black rounded-lg p-2">About</Link>
+              <Link href="/" className="bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition block">
+                Shop Now
+              </Link>
+              <Link href="/login" className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition block">
+                Log In
+              </Link>
               <div className="border-t border-gray-300 mt-2 pt-2">
                 <Link href="/profile" className="text-black hover:bg-gray-200 rounded-lg p-2 flex items-center">
                   <User size={24} className="mr-2" /> Account

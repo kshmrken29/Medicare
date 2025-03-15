@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Product } from '@/types/product';
 import { productAPI, postAPI } from '@/services/api';
 import Button from '@/components/ui/Button';
+import { toast } from "react-hot-toast";
 
 interface PostFormProps {
   onSuccess: () => void;
@@ -17,20 +18,20 @@ export default function PostForm({ onSuccess, onCancel }: PostFormProps) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadAvailableProducts();
+    const loadProducts = async () => {
+      try {
+        const allProducts = await productAPI.getAllProducts();
+        // Filter out products that are already posted
+        const postedProducts = await postAPI.getAllPosts();
+        const postedProductIds = new Set(postedProducts.map((post: { product: { id: number } }) => post.product.id));
+        const availableProducts = allProducts.filter((product: Product) => !postedProductIds.has(product.id));
+        setProducts(availableProducts);
+      } catch (error) {
+        toast.error('Failed to load products');
+      }
+    };
+    loadProducts();
   }, []);
-
-  const loadAvailableProducts = async () => {
-    try {
-      const allProducts = await productAPI.getAllProducts();
-      const availableProducts = allProducts.filter(
-        (product: Product) => product.status === 'Available' && product.stock_quantity > 0
-      );
-      setProducts(availableProducts);
-    } catch (error) {
-      console.error('Error loading products:', error);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,10 +43,14 @@ export default function PostForm({ onSuccess, onCancel }: PostFormProps) {
         product: Number(selectedProduct),
         type: postType,
       });
+      toast.success('Post created successfully');
       onSuccess();
-    } catch (error) {
-      console.error('Error creating post:', error);
-      alert('Failed to create post. Please try again.');
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        toast.error(error.response.data.error);
+      } else {
+        toast.error('Product already exists');
+      }
     } finally {
       setLoading(false);
     }

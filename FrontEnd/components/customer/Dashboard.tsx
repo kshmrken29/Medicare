@@ -3,18 +3,21 @@ import { useEffect, useState } from 'react';
 import { Product } from '@/types/product';
 import { productAPI } from '@/services/api';
 import ProductCard from '@/components/customer/ProductCard';
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 const CustomerDashboard = () => {
-  const [recentProducts, setRecentProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const products = await productAPI.getAllProducts();
-        setRecentProducts(products.slice(0, 4)); // Show only 4 recent products
-      } catch (error) {
-        console.error('Error fetching products:', error);
+        const fetchedProducts = await productAPI.getAllProducts();
+        setProducts(fetchedProducts);
+      } catch (err) {
+        setError('Failed to load products');
+        console.error('Error fetching products:', err);
       } finally {
         setLoading(false);
       }
@@ -24,17 +27,28 @@ const CustomerDashboard = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500 p-4">
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Welcome to Medicare</h1>
-      
+    <div className="space-y-8 p-4">
       <section>
-        <h2 className="text-xl font-semibold mb-4">Recent Products</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {recentProducts.map((product) => (
+        <h1 className="text-3xl font-bold mb-6">Welcome to Medicare</h1>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

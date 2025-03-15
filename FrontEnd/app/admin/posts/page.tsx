@@ -13,6 +13,7 @@ import { postAPI } from '@/services/api';
 import { Post } from '@/types/post';
 import Modal from '@/components/ui/Modal';
 import PostForm from '@/components/admin/posts/PostForm';
+import { toast } from "react-hot-toast";
 
 export default function PostProductManagementPage() {
   const router = useRouter();
@@ -28,7 +29,9 @@ export default function PostProductManagementPage() {
     try {
       const fetchedPosts = await postAPI.getAllPosts();
       setPosts(fetchedPosts);
+      toast.success('Posts loaded successfully');
     } catch (error) {
+      toast.error('Failed to load posts');
       console.error('Error loading posts:', error);
     }
   };
@@ -40,8 +43,10 @@ export default function PostProductManagementPage() {
   const handleEdit = async (post: Post) => {
     try {
       await postAPI.updatePost(post.id, { type: post.type });
-      await loadPosts(); 
+      await loadPosts();
+      toast.success('Post updated successfully');
     } catch (error) {
+      toast.error('Failed to update post');
       console.error('Error editing post:', error);
     }
   };
@@ -50,8 +55,10 @@ export default function PostProductManagementPage() {
     if (window.confirm('Are you sure you want to delete this post?')) {
       try {
         await postAPI.deletePost(post.id);
-        await loadPosts(); 
+        await loadPosts();
+        toast.success('Post deleted successfully');
       } catch (error) {
+        toast.error('Failed to delete post');
         console.error('Error deleting post:', error);
       }
     }
@@ -60,6 +67,7 @@ export default function PostProductManagementPage() {
   const handleAdd = async () => {
     setIsAddModalOpen(false);
     await loadPosts();
+    toast.success('Post added successfully');
   };
 
   return (

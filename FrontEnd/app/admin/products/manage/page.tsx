@@ -35,7 +35,9 @@ export default function ManageProductsPage() {
         imageAlt: `${product.brand_name} - ${product.generic_name}`
       }));
       setProducts(productsWithAlt);
+      toast.success('Products loaded successfully');
     } catch (error) {
+      toast.error('Failed to load products');
       console.error('Failed to load products:', error);
     } finally {
       setIsLoading(false);

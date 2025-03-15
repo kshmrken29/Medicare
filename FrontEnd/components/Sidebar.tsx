@@ -44,16 +44,6 @@ const navigationItems = [
       { href: "/admin/payments/refunds", label: "Refunds" },
     ],
   },
-  {
-    href: "/admin/reports",
-    icon: FiBarChart2,
-    label: "Reports & Analytics",
-    children: [
-      { href: "/admin/reports/sales", label: "Sales Reports" },
-      { href: "/admin/reports/orders", label: "Order Reports" },
-    ],
-  },
-  { href: "/admin/settings", icon: FiSettings, label: "Settings" },
   { href: "/", icon: FaSignOutAlt, label: "Logout" },
 
 ];

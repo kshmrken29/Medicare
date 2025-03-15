@@ -79,15 +79,7 @@ export default function Landing() {
         <p className="text-left mt-2">
           Welcome to Medic Care, your ultimate destination for all your food supplement needs. We pride ourselves on offering a comprehensive range of high-quality supplements designed to support your health and wellness journey.
         </p>
-        {/* Buttons */}
-        <div className="mt-4 flex gap-4">
-          <button className="bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-600 transition">
-            Shop Now
-          </button>
-          <Link href="/login" className="bg-blue-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
-                        Log In
-                    </Link>
-        </div>
+       
       </div>
       <div className="overflow-hidden flex-1">
         <Carousel />

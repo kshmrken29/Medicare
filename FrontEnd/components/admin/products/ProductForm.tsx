@@ -80,14 +80,24 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         }
       });
 
-      if (initialData?.id) {
-        await productAPI.updateProduct(initialData.id, submitData);
-        toast.success('Product updated successfully');
-      } else {
-        await productAPI.createProduct(submitData);
-        toast.success('Product created successfully');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/`, {
+        method: 'POST',
+        body: submitData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        // Check for specific error message from backend
+        if (errorData.error === "Product already listed") {
+          toast.error("Product already exists in the database");
+        } else {
+          toast.error("Failed to add product. Please try again.");
+        }
+        return;
       }
-      router.push('/admin/products/manage');
+
+      toast.success("Product added successfully");
+      router.push('/admin/products');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         console.error('Submission error details:', error.response?.data);

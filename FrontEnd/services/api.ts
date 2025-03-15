@@ -47,9 +47,9 @@ export const productAPI = {
         },
       });
       return response.data;
-    } catch (error) {
-      console.error('API Error Details:', error);
-      throw error;
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.error || 'Product already listed';
+      throw new Error(errorMessage);
     }
   },
 
@@ -219,10 +219,7 @@ export const postAPI = {
       const response = await axios.post(`${API_BASE_URL}/posts/`, postData);
       return response.data;
     } catch (error: any) {
-      console.error('Error response:', error.response?.data);
-      const errorMessage = error.response?.data?.error || 
-                          error.response?.data?.detail || 
-                          'Failed to create post';
+      const errorMessage = error.response?.data?.error || 'Product already listed';
       throw new Error(errorMessage);
     }
   },
