@@ -12,6 +12,7 @@ from .models import Category
 from .serializers import CategorySerializer
 from .models import Post
 from .serializers import PostSerializer
+from django.db import models
 
 class CustomerViewSet(viewsets.ModelViewSet):
     queryset = Customer.objects.all()
@@ -21,6 +22,30 @@ class CustomerViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    def create(self, request, *args, **kwargs):
+        try:
+            # Check if product with same names already exists
+            generic_name = request.data.get('generic_name')
+            brand_name = request.data.get('brand_name')
+            
+            existing_product = Product.objects.filter(
+                models.Q(generic_name__iexact=generic_name) | 
+                models.Q(brand_name__iexact=brand_name)
+            ).first()
+            
+            if existing_product:
+                return Response({
+                    'error': 'Product already listed',
+                    'detail': f'A product with name {existing_product.brand_name} or {existing_product.generic_name} already exists'
+                }, status=status.HTTP_400_BAD_REQUEST)
+            
+            return super().create(request, *args, **kwargs)
+        except Exception as e:
+            return Response(
+                {'error': 'Product already listed'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -116,15 +141,20 @@ class PostViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         try:
             product_id = request.data.get('product')
-            try:
-                product = Product.objects.get(id=product_id)
-            except Product.DoesNotExist:
-                return Response(
-                    {'error': 'Product not found'},
-                    status=status.HTTP_404_NOT_FOUND
-                )
+            post_type = request.data.get('type')
 
-            # Create the post
+            # Check if post already exists for this product and type
+            existing_post = Post.objects.filter(
+                product_id=product_id,
+                type=post_type
+            ).first()
+
+            if existing_post:
+                return Response({
+                    'error': 'Product already listed',
+                    'detail': f'This product is already posted as {post_type}'
+                }, status=status.HTTP_400_BAD_REQUEST)
+
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 serializer.save()

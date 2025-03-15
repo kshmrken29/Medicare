@@ -62,8 +62,8 @@ def admin_required(view_func):
     return wrapper
 
 class Product(models.Model):
-    generic_name = models.CharField(max_length=200)
-    brand_name = models.CharField(max_length=200)
+    generic_name = models.CharField(max_length=200, unique=True)
+    brand_name = models.CharField(max_length=200, unique=True)
     image = models.ImageField(upload_to='products/', null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='products')
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -103,7 +103,8 @@ class Post(models.Model):
     product = models.ForeignKey(
         Product, 
         on_delete=models.CASCADE, 
-        related_name='posts'
+        related_name='posts',
+        unique=True
     )
     type = models.CharField(
         max_length=10, 

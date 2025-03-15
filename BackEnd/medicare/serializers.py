@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Product, Category, Post
+from django.db.utils import IntegrityError
 
 Customer = get_user_model()
 
@@ -65,3 +66,9 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'product', 'type', 'created_at', 'updated_at', 'product_details']
+
+    def create(self, validated_data):
+        try:
+            return super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError({"error": "Product already listed"})
